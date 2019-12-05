@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Painter</title>
+	</head>
+
+	<body>
+
+		<div class="header">
+			<button onclick="showProblemDiagram()"> Problem Diagram </button>
+			<button onclick="showContextDiagram()"> Context Diagram </button>
+		</div>
+
+		<div class="left">
+			<input type="radio" name="shape" id="machine" value="machine" checked>machine
+			<input type="radio" name="shape" id="problemDomain" value="problemDomain">problem domain
+			<input type="radio" name="shape" id="requirement" value="requirement">requirement
+		</div>
+
+		<div class="middle">
+			<div id="myholder"></div>
+		</div>
+
+		<div class="right">
+			<table id="vue_phenomenon">
+				<tr>
+					<td>Initiator</td>
+					<td>Reciever</td>
+					<td>Content</td>
+				</tr>
+				<tr v-for="item in items">
+					<td>{{item.initiator}}</td>
+					<td>{{item.reciever}}</td>
+					<td>{{item.content}}</td>
+				</tr>
+			</table>
+			<div id="selector">
+				<select v-model="initiator">
+					<option v-for="option in options">{{option}}</option>
+				</select>
+				<select v-model="reciever">
+					<option v-for="option in options">{{option}}</option>
+				</select>
+				<input v-model="content">
+				<button onclick="updatePhenomenon()"> add </button>
+			</div>
+			<div class="elementEditor"></div>
+
+		</div>
+
+		<script src="scripts/source/jquery.js"></script>
+		<script src="scripts/source/lodash.js"></script>
+		<script src="scripts/source/backbone.js"></script>
+		<script src="scripts/source/graphlib.core.js"></script>
+		<script src="scripts/source/dagre.core.js"></script>
+		<script src="scripts/source/vue.js"></script>
+		<script src="scripts/source/joint.js"></script>
+
+		<script src="scripts/data.js"></script>
+		<script src="scripts/draw.js"></script>
+		<script src="scripts/events.js"></script>
+		<script src="scripts/presentation.js"></script>
+
+		<script src="scripts/source/painter.min.js"></script>
+	</body>
+
+</html>
