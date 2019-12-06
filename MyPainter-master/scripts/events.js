@@ -105,8 +105,6 @@ paper.on('link:pointerclick', function(linkView) {
 
 paper.on({
 
-
-
 	'element:pointerdown': function(elementView, evt) {
 
 		evt.data = elementView.model.position();
