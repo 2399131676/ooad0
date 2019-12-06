@@ -142,29 +142,69 @@
 var stencil = new joint.ui.Stencil({
 	paper: paperScroller,
 	scaleClones: true,
+	label: 'Element',
 	width: 240,
 	groups: {
 		step1: {
 			index: 1,
-			label: ' Step1 :  create a machine',
-			
+			label: '1. create a machine',
+
 		},
 		step2: {
 			index: 2,
-			label: ' Step2 :  create problem domains',
+			label: '2. create problem domains',
 		},
 		step3: {
 			index: 3,
-			label: ' Step3 :  create requirment',
-			height:80
+			label: '3. add interfaces',
+			closed:true,
+			height:1/3
+		},
+		step4: {
+			index: 4,
+			label: '4. create requirement',
+			height: 80
+		},
+		step5: {
+			index: 5,
+			label: '5. add references & constraint',
+			height:1/3
+		},
+		step6:{
+			index:6,
+			height:297,
+			label:'  '
 		}
 
 	},
 	dropAnimation: true,
-	groupsToggleButtons: true,
+	// groupsToggleButtons: true,
 	layout: {
 		columnWidth: 240,
 		columns: 1
+	}
+});
+
+graph.on('add', function(cell, collection, opt) {
+	var models = paper.model.attributes.cells.models;
+	if (opt.stencil && cell.attributes.type == 'machine.entity') {
+		for(i=0;i<models.length-1;i++)
+		{
+			if(models[i].attributes.type == 'machine.entity') {
+				joint.ui.FlashMessage.open('Machine already existed!','',{type:'alert',closeAnimation:{delay:3000}});
+				cell.remove();
+				break;
+			}
+		}
+	}else if(opt.stencil && cell.attributes.type == 'requirement.entity') {
+		for(i=0;i<models.length-1;i++)
+		{
+			if(models[i].attributes.type == 'requirement.entity') {
+				joint.ui.FlashMessage.open('requirement already existed!','',{type:'alert',closeAnimation:{delay:3000}});
+				cell.remove();
+				break;
+			}
+		}
 	}
 });
 
@@ -210,7 +250,7 @@ stencil.render().load({
 		attrs: {
 			label: {
 				text: 'problemDomain',
-				x:-31
+				x: -31
 			},
 			description: {
 				text: null
@@ -224,21 +264,22 @@ stencil.render().load({
 			}
 		}
 	}],
-	step3: [{
+	step3:[],
+	step4: [{
 		type: 'requirement.entity',
 		attrs: {
 			label: {
 				text: 'requirement',
 				visibility: 'visible',
-				y:20,
-				x:-18
+				y: 20,
+				x: -18
 			},
 			body: {
 				ref: 'label',
 				refRx: '60%',
 				refRy: '150%',
-				refX:'50%',
-				refY:'50%'
+				refX: '50%',
+				refY: '50%'
 			}
 		}
 	}]
@@ -368,11 +409,11 @@ stencil.render().load({
 				group: 'context',
 				text: 'Context Diagram'
 			},
-			// { type: 'zoom-out', name: 'zoom-out', group: 'zoom' },
-			// { type: 'zoom-in', name: 'zoom-in', group: 'zoom' }
+			 { type: 'zoom-out', name: 'zoom-out', group: 'zoom' },
+			 { type: 'zoom-in', name: 'zoom-in', group: 'zoom' }
 		],
 		references: {
-			// paperScroller: paperScroller // built in zoom-in/zoom-out control types require access to paperScroller instance
+			 paperScroller: paperScroller // built in zoom-in/zoom-out control types require access to paperScroller instance
 		}
 	});
 	toolbar.on({
@@ -437,61 +478,61 @@ stencil.render().load({
 
 
 // 没用过的功能
-{
-	var myShape = new joint.shapes.machine.entity({
-		size: {
-			width: 100,
-			height: 100
-		},
-		position: {
-			x: 50,
-			y: 50
-		},
-		attrs: {
-			label: {
-				text: 'My machine'
-			}
-		},
-	});
-	graph.addCell(myShape);
+// {
+// 	var myShape = new joint.shapes.machine.entity({
+// 		size: {
+// 			width: 100,
+// 			height: 100
+// 		},
+// 		position: {
+// 			x: 50,
+// 			y: 50
+// 		},
+// 		attrs: {
+// 			label: {
+// 				text: 'My machine'
+// 			}
+// 		},
+// 	});
+// 	graph.addCell(myShape);
 
-	// Get element from the graph and change its properties.
-	myShape = graph.getElements()[0];
-	myShape.prop('attrs/label/text', 'My Updated Shape');
-	myShape.prop('size/width', 150);
-	myShape.prop('level', 2);
-	myShape.prop('attrs/body/fill', '#FE854F');
+// 	// Get element from the graph and change its properties.
+// 	myShape = graph.getElements()[0];
+// 	myShape.prop('attrs/label/text', 'My Updated Shape');
+// 	myShape.prop('size/width', 150);
+// 	myShape.prop('level', 2);
+// 	myShape.prop('attrs/body/fill', '#FE854F');
 
-	// Create a clone of an element.
-	var myShape2 = myShape.clone();
-	myShape2.translate(400, 0);
-	graph.addCell(myShape2);
+// 	// Create a clone of an element.
+// 	var myShape2 = myShape.clone();
+// 	myShape2.translate(400, 0);
+// 	graph.addCell(myShape2);
 
-	// Create a link that connects two elements.
-	var myLink = new joint.shapes.standard.Link({
-		attrs: {
-			line: {
-				stroke: 'white'
-			}
-		},
-		source: {
-			id: myShape.id,
-			port: 'out1'
-		},
-		target: {
-			id: myShape2.id,
-			port: 'in1'
-		}
-	});
-	graph.addCell(myLink);
+// 	// Create a link that connects two elements.
+// 	var myLink = new joint.shapes.standard.Link({
+// 		attrs: {
+// 			line: {
+// 				stroke: 'white'
+// 			}
+// 		},
+// 		source: {
+// 			id: myShape.id,
+// 			port: 'out1'
+// 		},
+// 		target: {
+// 			id: myShape2.id,
+// 			port: 'in1'
+// 		}
+// 	});
+// 	graph.addCell(myLink);
 
-	// React on changes in the graph.
-	// graph.on('change add remove', function() {
-	// 	var diagramJsonString = JSON.stringify(graph.toJSON());
-	// 	console.log('Diagram JSON', diagramJsonString);
-	// });
-	graph.on('change:level', function(cell, level) {
-		var color = (level > 8) ? 'red' : 'white';
-		cell.prop('attrs/body/fill', color);
-	});
-}
+// 	// React on changes in the graph.
+// 	// graph.on('change add remove', function() {
+// 	// 	var diagramJsonString = JSON.stringify(graph.toJSON());
+// 	// 	console.log('Diagram JSON', diagramJsonString);
+// 	// });
+// 	graph.on('change:level', function(cell, level) {
+// 		var color = (level > 8) ? 'red' : 'white';
+// 		cell.prop('attrs/body/fill', color);
+// 	});
+// }
