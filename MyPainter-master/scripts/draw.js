@@ -331,6 +331,16 @@ function drawProblemDomain(pname) {
 	})
 }
 
+var textBlock = new joint.shapes.standard.TextBlock();
+textBlock.resize(100, 100);
+textBlock.position(250, 610);
+textBlock.attr('root/title', 'joint.shapes.standard.TextBlock');
+textBlock.attr('body/fill', 'lightgray');
+textBlock.attr('label/text', 'Hyper Text Markup Language');
+// Styling of the label via `style` presentation attribute (i.e. CSS).
+textBlock.attr('label/style/color', 'red');
+textBlock.addTo(graph)
+
 function drawMachine(mname) {
 	if (machine.id != null) {
 		alert('machine existed!');
