@@ -1,0 +1,64 @@
+/* CSS Document */
+*{margin:0px;padding:0px;}
+html,body{height:100%;}
+li{list-style-type:none;}
+img{border:0px;vertical-align:middle;}
+a{text-decoration:none;outline:none;blr:expression(this.onFocus=this.blur());}
+.clear{clear:both;}
+.ce{display:block;width:220px;background:burlywood;position:fixed;z-index:5;top:80px;right:0px;}
+.ce li{border-bottom: 1px solid burlywood;border-top: 1px solid burlywood;}
+.more{margin-left: 36px;}
+.ce li a{padding: 10px 10px 10px 40px;color:black;display:block;cursor:pointer;background:url(../images/tu.png) no-repeat 10px center;}
+.ce li a:hover{background:burlywood;}
+.ce li .dqian{background:none}
+.ce li .xz{background:burlywood;}
+
+.er{display:none;width:220px;background:cornsilk;}
+.er li{width:100%;border:solid rgb(140,140,140);border-width:1px 0px 0px;}
+.er li a{display:block;padding:10px 10px 10px 20px;color:black;background:none;font-size: 15px;}
+.er .e_li a{background:url(../images/more.png) no-repeat 120px center;}
+.er li a:hover,.er li .sen_x{background:beige;}
+.er .e_li a:hover,.er .e_li .sen_x{background:beige;}
+
+.thr{background:rgb(150,150,150);display:none;}
+.thr li{margin-bottom:1px;border-top: 1px solid rgb(180,180,180);position:relative;}
+.er .e_li .thr li a{background:none;}
+.er .e_li .thr li a:hover{background:beige;}
+.er .e_li .thr li .xuan{background:beige;}
+.more1{margin-left: 28px;margin-top: -4px;}
+.thr_nr{width:300px;position:absolute;top:0px;left:150px;z-index:10;border:1px solid rgb(201,201,201);display:none;}
+.thr_nr h3{font-weight:normal;font-size:18px;display:block;text-align:center;width:100%;padding:10px 0px;}
+.thr_nr img{width:100%;}
+
+
+
+.ti {width: 29px;height:29px;float: left;padding-top: 3px;cursor: pointer;text-align: center;margin-right: 10px;margin-top:40px;margin-left:20px;background: url(../images/11.png) no-repeat;}
+.inpu {cursor: pointer;filter:alpha(opacity=0);-moz-opacity:0; opacity:0;width:29px;height:29px;}
+.span{float:left;display:block;padding:4px 40px 0px 0px;color:#000;}
+.tu1{width: 29px;height:29px;float: left;padding-top: 3px;cursor: pointer;text-align: center;margin-right: 10px;margin-top:40px;margin-left:20px;background:url(../images/22.png) no-repeat;}
+.span1{color:#f00;float:left;display:block;padding:4px 40px 0px 0px;}
+.span2{color:#000;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

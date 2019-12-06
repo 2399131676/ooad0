@@ -1,3 +1,4 @@
+
 var lock = false;
 var source = null;
 var target = null;
@@ -19,6 +20,11 @@ var paper = new joint.dia.Paper({
 		}
 	})
 });
+
+//joint.setTheme('dark');
+
+//joint.setTheme('modern');
+//joint.setTheme('default');
 
 function drawInterface(source, target) {
 	joint.dia.Link.define('interface.CustomLink', {
@@ -147,7 +153,7 @@ function drawConstraint(source, target) {
 
 function drawRequirement(rname) {
 	if (requirement.id != null) {
-		alert('requirement existed!');
+		joint.ui.FlashMessage.open('requirement existed!','',{type:'alert',closeAnimation:{delay:3000}});
 		return;
 	}
 	rname = typeof(rname) != 'undefined' ? rname : "requirement";
@@ -157,7 +163,7 @@ function drawRequirement(rname) {
 				fill: 'black'
 			},
 			body: {
-				ref:'label',
+				ref: 'label',
 				refRx: '60%',
 				refRy: '150%',
 			},
@@ -172,7 +178,7 @@ function drawRequirement(rname) {
 			},
 			buttonLabel: {
 				pointerEvents: 'none',
-				ref:'body',
+				ref: 'body',
 				refX: '90%',
 				refY: '30',
 				y: -20,
@@ -445,4 +451,15 @@ function drawMachine(mname) {
 	updateElement();
 	var models = paper.model.attributes.cells.models;
 	machine.id = models[models.length - 1].id;
+}
+
+function changeReferenceToConstraint(linkView) {
+	var link = linkView.model;
+	link.attr({
+		line: {
+			targetMarker: {
+				'type': 'path',
+				'd': 'M 10 -5 0 0 10 5 z'
+			}
+		}});
 }

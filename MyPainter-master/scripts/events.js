@@ -23,7 +23,8 @@ paper.on('blank:pointerclick', function() {
 	}
 
 
-})
+});
+
 
 paper.on('element:pointerdblclick', function(elementView) {
 	joint.ui.Inspector.create('.elementEditor', {
@@ -71,23 +72,34 @@ paper.on('element:button:pointerdown', function(elementView, evt) {
 
 
 paper.on('link:pointerclick', function(linkView) {
-	joint.ui.Inspector.create('.inspector-container', {
-		cell: linkView.model,
-		inputs: {
-			'labels/0/attrs/text/text': { //
-				type: 'text',
-				label: 'Label',
-				group: 'basic',
-				index: 1
-			}
-		},
-		groups: {
-			basic: {
-				label: 'Basic',
-				index: 1
-			}
-		}
-	});
+	// joint.ui.Inspector.create('.linkEditor', {
+	// 	cell: linkView.model,
+	// 	inputs: {
+	// 		'labels/0/attrs/text/text': { //
+	// 			type: 'text',
+	// 			label: 'Name',
+	// 			group: 'basic',
+	// 			index: 1
+	// 		}
+	// 	},
+	// 	groups: {
+	// 		basic: {
+	// 			label: 'Basic',
+	// 			index: 1
+	// 		}
+	// 	}
+	// });
+	var model=linkView.model;
+	if(model.attributes.type=="reference.CustomLink"){
+		var dialog = new joint.ui.Dialog({
+		    width: 300,
+		    title: 'reference',
+		    content: 'Do you want to change it into constraint?',
+			buttons:
+				{action:'changeReferenceToConstraint(linkView)',content:'changeReferenceToConstraint'}
+		});
+		dialog.open();
+	}
 });
 
 
