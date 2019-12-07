@@ -15,6 +15,12 @@
 				connection: true,
 				strokeWidth: 10,
 				strokeLinejoin: 'round'
+			},
+			source: {
+				visibility: 'hidden'
+			},
+			target: {
+				visibility: 'hidden'
 			}
 		}
 	}, {
@@ -33,6 +39,12 @@
 				'fill': 'none',
 				'pointer-events': 'none'
 			}
+		}, {
+			tagName: 'text',
+			selector: 'source'
+		}, {
+			tagName: 'text',
+			selector: 'target'
 		}]
 	});
 
@@ -47,6 +59,12 @@
 				attrs: {
 					line: {
 						stroke: '#717d98'
+					},
+					source: {
+						text: null
+					},
+					target: {
+						text: null
 					}
 				}
 			});
@@ -69,15 +87,29 @@
 	});
 }
 
-function changeReferenceToConstraint(link) {
-	link.attr({
-		line: {
-			targetMarker: {
-				'type': 'path',
-				'd': 'M 10 -5 0 0 10 5 z'
+function changeReferenceAndConstraint(link) {
+	if (link.attributes.type == 'reference.CustomLink') {
+		link.attr({
+			line: {
+				targetMarker: {
+					'type': 'path',
+					'd': 'M 10 -5 0 0 10 5 z'
+				}
 			}
-		}
-	});
+		});
+		link.attributes.type = 'constraint.CustomLink';
+	} else if (link.attributes.type == 'constraint.CustomLink') {
+		link.attr({
+			line: {
+				targetMarker: {
+					'type':null,
+					'd':null
+				}
+			}
+		});
+		link.attributes.type = 'reference.CustomLink';
+	}
+
 }
 
 function changeInterfaceToReference(link) {
@@ -87,6 +119,7 @@ function changeInterfaceToReference(link) {
 			strokeDashoffset: '2.5'
 		}
 	});
+	link.attributes.type = 'reference.CustomLink';
 }
 
 
@@ -94,6 +127,20 @@ function changeInterfaceToReference(link) {
 {
 	document.querySelector('.paper-container').appendChild(paperScroller.el);
 	paperScroller.render().center();
+}
+
+function updateLink(linkView) {
+	var link = linkView.model;
+	var sourceName = getLabelById(link.attributes.source.id);
+	var targetName = getLabelById(link.attributes.target.id);
+	link.attr({
+		source: {
+			text: sourceName
+		},
+		target: {
+			text: targetName
+		}
+	});
 }
 
 // 自定义图形
@@ -351,31 +398,64 @@ paper.on('element:pointerclick', function(elementView) {
 	joint.ui.Inspector.create('.inspector-container', {
 		cell: elementView.model,
 		inputs: {
-			'attrs/label/text': {
-				type: 'text',
-				label: 'Label',
-				group: 'basic',
-				index: 1
-			},
-			level: {
-				type: 'range',
-				min: 1,
-				max: 10,
-				unit: 'x',
-				defaultValue: 6,
-				label: 'Level',
-				group: 'advanced',
-				index: 2
+			attrs: {
+				label: {
+					text: {
+						type: 'textarea',
+						label: 'NAME',
+						group: 'edit',
+						index: 1
+					}
+				},
+				description: {
+					text: {
+						type: 'textarea',
+						label: 'DESCRIPTION',
+						group: 'edit',
+						index: 2
+					}
+				}
+
 			}
 		},
 		groups: {
-			basic: {
-				label: 'Basic',
+			edit: {
+				label: 'ELEMENT',
 				index: 1
-			},
-			advanced: {
-				label: 'Advanced',
-				index: 2
+			}
+		}
+	});
+});
+
+paper.on('link:pointerclick', function(linkView) {
+	updateLink(linkView);
+	joint.ui.Inspector.create('.inspector-container', {
+		cell: linkView.model,
+		inputs: {
+			attrs: {
+				source: {
+					text: {
+						type: 'content-editable',
+						label: 'SOURCE',
+						group: 'edit',
+						index: 1
+					}
+				},
+				target: {
+					text: {
+						type: 'content-editable',
+						label: 'TARGET',
+						group: 'edit',
+						index: 2
+					}
+				}
+
+			}
+		},
+		groups: {
+			edit: {
+				label: 'LINK',
+				index: 1
 			}
 		}
 	});
@@ -391,7 +471,7 @@ function getTypeById(id) {
 function getLabelById(id) {
 	var models = paper.model.attributes.cells.models;
 	for (i = 0; i < models.length; i++) {
-		if (models[i].id == id) return models[i].attrs.label.text;
+		if (models[i].id == id) return models[i].attributes.attrs.label.text;
 	}
 }
 
@@ -419,21 +499,20 @@ paper.on('element:pointerclick', function(elementView) {
 	}).render();
 
 	halo.on('action:link:add', function(link) {
-			var sourceId = link.get('source').id;
-			var targetId = link.get('target').id;
-			var sourceType = getTypeById(sourceId);
-			var targetType = getTypeById(targetId);
+		var sourceId = link.get('source').id;
+		var targetId = link.get('target').id;
+		var sourceType = getTypeById(sourceId);
+		var targetType = getTypeById(targetId);
 
-			if (!sourceId || !targetId || (sourceType == 'domain.entity' && targetType == 'domain.entity') || (sourceType ==
-					'machine.entity' && targetType == 'requirement.entity') || (sourceType == 'requirement.entity' && targetType ==
-					'machine.entity')) {
-				link.remove();
-			} else if ((sourceType ==
-					'domain.entity' && targetType == 'requirement.entity') || (sourceType == 'requirement.entity' && targetType ==
-					'domain.entity'))
-					{
-						changeInterfaceToReference(link);
-					}
+		if (!sourceId || !targetId || (sourceType == 'domain.entity' && targetType == 'domain.entity') || (sourceType ==
+				'machine.entity' && targetType == 'requirement.entity') || (sourceType == 'requirement.entity' && targetType ==
+				'machine.entity')) {
+			link.remove();
+		} else if ((sourceType ==
+				'domain.entity' && targetType == 'requirement.entity') || (sourceType == 'requirement.entity' && targetType ==
+				'domain.entity')) {
+			changeInterfaceToReference(link);
+		}
 	});
 });
 
@@ -450,6 +529,26 @@ paper.on('link:pointerup', function(linkView) {
 		]
 	});
 	linkView.addTools(toolsView);
+	var link = linkView.model;
+	if (link.attributes.type == 'reference.CustomLink' || link.attributes.type == 'constraint.CustomLink') {
+		var handles = [{
+			name: 'change',
+			position: 'ne',
+			icon: 'data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7'
+		}];
+		var halo = new joint.ui.Halo({
+			cellView: linkView,
+			handles: handles
+		}).render();
+		halo.on('action:change:pointerdown', function(evt) {
+			changeReferenceAndConstraint(link);
+		});
+	}
+
+
+
+
+
 });
 //点空白处
 paper.on('blank:pointerdown', function() {
@@ -470,7 +569,7 @@ var toolbar = new joint.ui.Toolbar({
 			type: 'button',
 			name: 'clear',
 			group: 'clear',
-			text: 'Clear Diagram'
+			text: 'New Project'
 		},
 		{
 			type: 'button',
@@ -515,7 +614,7 @@ toolbar.render();
 function showProblemDiagram() {
 	var models = paper.model.attributes.cells.models;
 	for (var i = 0; i < models.length; i++) {
-		if (models[i].attributes.type == "requirement.CustomElement") {
+		if (models[i].attributes.type == "requirement.entity") {
 			models[i].attr('label/visibility', 'hidden');
 			models[i].attr('body/visibility', 'hidden');
 			models[i].attr('button/visibility', 'hidden');
@@ -526,18 +625,12 @@ function showProblemDiagram() {
 			models[i].attr('line/visibility', 'hidden');
 		}
 	}
-	joint.ui.FlashMessage.open('succeed in problem!', '', {
-		type: 'alert',
-		closeAnimation: {
-			delay: 3000
-		}
-	});
 }
 
 function showContextDiagram() {
 	var models = paper.model.attributes.cells.models;
 	for (var i = 0; i < models.length; i++) {
-		if (models[i].attributes.type == "requirement.CustomElement") {
+		if (models[i].attributes.type == "requirement.entity") {
 			models[i].attr('label/visibility', 'visible');
 			models[i].attr('body/visibility', 'visible');
 			models[i].attr('button/visibility', 'visible');
@@ -548,10 +641,4 @@ function showContextDiagram() {
 			models[i].attr('line/visibility', 'visible');
 		}
 	}
-	joint.ui.FlashMessage.open('succeed in context!', '', {
-		type: 'alert',
-		closeAnimation: {
-			delay: 3000
-		}
-	});
 }

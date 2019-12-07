@@ -28,8 +28,8 @@ html, body {
 /*  Inspector  */
 .inspector-container {
     position: absolute;
-    top: 50px;
-    right: 0;
+    top: 422px;
+    left: 0;
     bottom: -50px;
     width: 240px;
 }
