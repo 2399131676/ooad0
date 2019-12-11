@@ -98,34 +98,3 @@ h1, h2, h3 {
 .table tr.alter {
     background-color: #f5fafe;
 }
-
-
-/*table*/
-/*{*/
-/*    border-collapse: collapse;*/
-/*    margin: 0 auto;*/
-/*    line-height: 15px;*/
-/*    text-align: center;*/
-/*    font-size: 16px;*/
-/*    font-family:'Roboto Light';*/
-/*}*/
-/*table td, table th*/
-/*{*/
-/*    border: 1px solid #cad9ea;*/
-/*    color: #666;*/
-/*    height: 18px;*/
-/*    width:90px;*/
-/*}*/
-/*table thead th*/
-/*{*/
-/*    background-color: #CCE8EB;*/
-/*    width:90px;*/
-/*}*/
-/*table tr:nth-child(odd)*/
-/*{*/
-/*    background: #fff;*/
-/*}*/
-/*table tr:nth-child(even)*/
-/*{*/
-/*    background: #F5FAFA;*/
-/*}*/

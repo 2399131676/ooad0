@@ -107,7 +107,7 @@ function changeReferenceAndConstraint(link) {
 			}
 		});
 		link.attributes.type = 'constraint.CustomLink';
-	} else if (link.attributes.type == 'constraint.CustomLink') {
+	} else if (link.attributes.type === 'constraint.CustomLink') {
 		link.attr({
 			line: {
 				targetMarker: {
@@ -295,9 +295,9 @@ var stencil = new joint.ui.Stencil({
 
 graph.on('add', function(cell, collection, opt) {
 	var models = paper.model.attributes.cells.models;
-	if (opt.stencil && cell.attributes.type == 'machine.entity') {
+	if (opt.stencil && cell.attributes.type === 'machine.entity') {
 		for (i = 0; i < models.length - 1; i++) {
-			if (models[i].attributes.type == 'machine.entity') {
+			if (models[i].attributes.type === 'machine.entity') {
 				joint.ui.FlashMessage.open('Machine already existed!', '', {
 					type: 'alert',
 					closeAnimation: {
@@ -308,9 +308,10 @@ graph.on('add', function(cell, collection, opt) {
 				break;
 			}
 		}
-	} else if (opt.stencil && cell.attributes.type == 'requirement.entity') {
+	} else if (opt.stencil && cell.attributes.type === 'requirement.entity') {
+	} else if (opt.stencil && cell.attributes.type === 'requirement.entity') {
 		for (i = 0; i < models.length - 1; i++) {
-			if (models[i].attributes.type == 'requirement.entity') {
+			if (models[i].attributes.type === 'requirement.entity') {
 				joint.ui.FlashMessage.open('requirement already existed!', '', {
 					type: 'alert',
 					closeAnimation: {
@@ -547,7 +548,7 @@ paper.on('link:pointerup', function(linkView) {
 	});
 	linkView.addTools(toolsView);
 	var link = linkView.model;
-	if (link.attributes.type == 'reference.CustomLink' || link.attributes.type == 'constraint.CustomLink') {
+	if (link.attributes.type === 'reference.CustomLink' || link.attributes.type === 'constraint.CustomLink') {
 		var handles = [{
 			name: 'change',
 			position: 'ne',
@@ -594,7 +595,7 @@ paper.on('blank:pointerdown', function() {
 
 function editPhenomenon(link)
 {
-	joint.ui.FlashMessage.open('假装准备添加phenomenon', '', {
+	joint.ui.FlashMessage.open('Add phenomenon', '', {
 		type: 'alert',
 		closeAnimation: {
 			delay: 2000
@@ -712,14 +713,14 @@ toolbar.render();
 function showContextDiagram() {
 	var models = paper.model.attributes.cells.models;
 	for (var i = 0; i < models.length; i++) {
-		if (models[i].attributes.type == "requirement.entity") {
+		if (models[i].attributes.type === "requirement.entity") {
 			models[i].attr('label/visibility', 'hidden');
 			models[i].attr('body/visibility', 'hidden');
 			models[i].attr('button/visibility', 'hidden');
 			models[i].attr('buttonLabel/visibility', 'hidden');
-		} else if (models[i].attributes.type == "reference.CustomLink") { //constraint.CustomLink
+		} else if (models[i].attributes.type === "reference.CustomLink") { //constraint.CustomLink
 			models[i].attr('line/visibility', 'hidden')
-		} else if (models[i].attributes.type == "constraint.CustomLink") {
+		} else if (models[i].attributes.type === "constraint.CustomLink") {
 			models[i].attr('line/visibility', 'hidden');
 		}
 	}
@@ -728,14 +729,14 @@ function showContextDiagram() {
 function showProblemDiagram() {
 	var models = paper.model.attributes.cells.models;
 	for (var i = 0; i < models.length; i++) {
-		if (models[i].attributes.type == "requirement.entity") {
+		if (models[i].attributes.type === "requirement.entity") {
 			models[i].attr('label/visibility', 'visible');
 			models[i].attr('body/visibility', 'visible');
 			models[i].attr('button/visibility', 'visible');
 			models[i].attr('buttonLabel/visibility', 'visible');
-		} else if (models[i].attributes.type == "reference.CustomLink") {
+		} else if (models[i].attributes.type === "reference.CustomLink") {
 			models[i].attr('line/visibility', 'visible')
-		} else if (models[i].attributes.type == "constraint.CustomLink") {
+		} else if (models[i].attributes.type === "constraint.CustomLink") {
 			models[i].attr('line/visibility', 'visible');
 		}
 	}
