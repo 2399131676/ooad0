@@ -614,7 +614,7 @@ function editPhenomenon(link)
 	            var p = {
 	                Initiator: selected,
 	                Receiver: unselected,
-	                description: phenomenon
+					content: phenomenon
 	            };
 	            link.phenomenon.push(p);
 	            addPhenomenon(p);
@@ -744,43 +744,51 @@ function showProblemDiagram() {
 function check() {
 	var models = paper.model.attributes.cells.models;
 	var element = new Array();
+	var correct = true;
 	for (var i = 0; i < models.length; i++) {
 		var modelType = models[i].attributes.type;
 		var modelId = models[i].id;
-		if ((modelType == "requirement.entity") || (modelType == 'machine.entity') || (modelType == 'domain.entity')) {
+		if ((modelType === "requirement.entity") || (modelType === 'machine.entity') || (modelType === 'domain.entity')) {
 			element.push(modelId);
-		} else if ((modelType == 'interface.CustomLink') || (modelType == 'reference.CustomLink') || (modelType ==
-				'constraint.CustomLink')) {
+		} else if ((modelType === 'interface.CustomLink') || (modelType === 'reference.CustomLink') || (modelType ===
+			'constraint.CustomLink')) {
+			if (models[i].phenomenon === undefined) {
+				joint.ui.FlashMessage.open('Connection should have phenomenons!', '', {
+					type: 'alert',
+					closeAnimation: {
+						delay: 2000
+					}
+				});
+				correct = false;
+			}
 			for (var j = 0; j < element.length; j++) {
-				if (element[j] == models[i].attributes.source.id || element[j] == models[i].attributes.target.id) {
+				if (element[j] === models[i].attributes.source.id || element[j] === models[i].attributes.target.id) {
 					element.splice(j,1);
 					j--;
 				}
 			}
 		}
 	}
-	if(element.length!=0)
+	if (element.length !== 0)
 	{
 		for(var i=0;i<element.length;i++)
 		{
 			var modelType = getTypeById(element[i]);
-			if(modelType == 'machine.entity'){
+			if (modelType === 'machine.entity') {
 				joint.ui.FlashMessage.open('Machine shouldn\'t be isolated!', '', {
 					type: 'alert',
 					closeAnimation: {
 						delay: 2000
 					}
 				});
-			}
-			else if(modelType == 'domain.entity'){
+			} else if (modelType === 'domain.entity') {
 				joint.ui.FlashMessage.open('Problem domain shouldn\'t be isolated!', '', {
 					type: 'alert',
 					closeAnimation: {
 						delay: 2000
 					}
 				});
-			}
-			else if(modelType == 'requirement.entity'){
+			} else if (modelType === 'requirement.entity') {
 				joint.ui.FlashMessage.open('Requirement shouldn\'t be isolated!', '', {
 					type: 'alert',
 					closeAnimation: {
@@ -789,8 +797,7 @@ function check() {
 				});
 			}
 		}
-	}
-	else if(element.length==0)
+	} else if (element.length === 0 && correct)
 	{
 		joint.ui.FlashMessage.open('Correct!', '', {
 			type: 'alert',
@@ -800,6 +807,66 @@ function check() {
 		});
 	}
 }
+
+// function check() {
+// 	var models = paper.model.attributes.cells.models;
+// 	var element = new Array();
+// 	for (var i = 0; i < models.length; i++) {
+// 		var modelType = models[i].attributes.type;
+// 		var modelId = models[i].id;
+// 		if ((modelType == "requirement.entity") || (modelType == 'machine.entity') || (modelType == 'domain.entity')) {
+// 			element.push(modelId);
+// 		} else if ((modelType == 'interface.CustomLink') || (modelType == 'reference.CustomLink') || (modelType ==
+// 				'constraint.CustomLink')) {
+// 			for (var j = 0; j < element.length; j++) {
+// 				if (element[j] == models[i].attributes.source.id || element[j] == models[i].attributes.target.id) {
+// 					element.splice(j,1);
+// 					j--;
+// 				}
+// 			}
+// 		}
+// 	}
+// 	if(element.length!=0)
+// 	{
+// 		for(var i=0;i<element.length;i++)
+// 		{
+// 			var modelType = getTypeById(element[i]);
+// 			if(modelType == 'machine.entity'){
+// 				joint.ui.FlashMessage.open('Machine shouldn\'t be isolated!', '', {
+// 					type: 'alert',
+// 					closeAnimation: {
+// 						delay: 2000
+// 					}
+// 				});
+// 			}
+// 			else if(modelType == 'domain.entity'){
+// 				joint.ui.FlashMessage.open('Problem domain shouldn\'t be isolated!', '', {
+// 					type: 'alert',
+// 					closeAnimation: {
+// 						delay: 2000
+// 					}
+// 				});
+// 			}
+// 			else if(modelType == 'requirement.entity'){
+// 				joint.ui.FlashMessage.open('Requirement shouldn\'t be isolated!', '', {
+// 					type: 'alert',
+// 					closeAnimation: {
+// 						delay: 2000
+// 					}
+// 				});
+// 			}
+// 		}
+// 	}
+// 	else if(element.length==0)
+// 	{
+// 		joint.ui.FlashMessage.open('Correct!', '', {
+// 			type: 'alert',
+// 			closeAnimation: {
+// 				delay: 2000
+// 			}
+// 		});
+// 	}
+// }
 
 var vphenomenons = new Vue({
     el:'#vue_phenomenon',
@@ -814,7 +881,7 @@ var selector = new Vue({
     data:{
         options: null,
         initiator: null,
-        reciever: null,
+		receiver: null,
         content:null
     }
 });
@@ -824,25 +891,34 @@ function updateOptions(){
     var models = paper.model.attributes.cells.models;
 	selector.options = new Array();
 	for( i=0;i<models.length;i++){
-		if(models[i].attributes.type=='machine.entity'||models[i].attributes.type=='domain.entity')
-		selector.options.push(models[i].attributes.id);
+		if (models[i].attributes.type === 'machine.entity' || models[i].attributes.type === 'domain.entity')
+			selector.options.push(models[i].attributes.attrs.label.text);
 	}    
 }
 
 function updatePhenomenon(){
-    vphenomenons.items.push({initiator:selector.initiator,reciever:selector.reciever,content:selector.content});
+	vphenomenons.items.push({initiator: selector.initiator, receiver: selector.receiver, content: selector.content});
 }
 
 function getPhenomenonList(model){
     var phenomenons = model.phenomenon;
-    var str = "<table border='1px' cellspacing='0' cellpadding='0'><tr><th bgcolor='#deb887'>Initiator</th><th bgcolor='#deb887'>Receiver</th><th bgcolor='#deb887'>Description</th></tr>";
+	var str = "<table border='1px' cellspacing='0' cellpadding='0'>" +
+		"<tr>" +
+		"<th bgcolor='#edf1f8'>Initiator</th>" +
+		"<th bgcolor='#edf1f8'>Receiver</th>" +
+		"<th bgcolor='#edf1f8'>Content</th>" +
+		"</tr>";
     for(var i=0;i<phenomenons.length;i++){
-        str += '<tr bgcolor="#f5f5dc">'+'<td>'+ getLabelById(phenomenons[i].Initiator)+'</td>'+'<td>'+ getLabelById(phenomenons[i].Receiver)+'</td>'+'<td>'+ phenomenons[i].description+'</td>'+'</tr>'
+		str += '<tr bgcolor="#ecf0f8">' + '<td>' + getLabelById(phenomenons[i].Initiator) + '</td>' + '<td>' + getLabelById(phenomenons[i].Receiver) + '</td>' + '<td>' + phenomenons[i].content + '</td>' + '</tr>'
     }
     str += '</table>';
     return str;
 }
 
 function addPhenomenon(phenomenon){
-    vphenomenons.items.push({initiator:getLabelById(phenomenon.Initiator),reciever:getLabelById(phenomenon.Receiver),description:phenomenon.description});
+	vphenomenons.items.push({
+		initiator: getLabelById(phenomenon.Initiator),
+		receiver: getLabelById(phenomenon.Receiver),
+		content: phenomenon.content
+	});
 }

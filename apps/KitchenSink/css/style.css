@@ -65,6 +65,12 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
     font-weight: Bold;
 }
 
+@font-face {
+    font-family: 'Century Gothic';
+    src: url('../assets/fonts/Century_Gothic/Century Gothic.ttf');
+    font-weight: Normal;
+}
+
 html, body, .joint-app {
     position: relative;
     width: 100%;
@@ -76,7 +82,7 @@ html, body, .joint-app {
 
 body {
     -webkit-user-select: none;
-    -moz-user-select: -moz-none;
+    -moz-user-select: all;
     user-select: none;
     font-family: sans-serif, Arial;
     overflow: hidden;

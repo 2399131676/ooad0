@@ -15,7 +15,6 @@ html, body {
     margin: 0;
     padding: 0;
 }
-
 /*  Paper  */
 .paper-container {
     position: absolute;
@@ -54,5 +53,79 @@ html, body {
 	right: 0;
 	top: 50px;
 	bottom:-50px;
-	width: 240px;
+    width: 280px;
 }
+
+
+body, table {
+    font-size: 14px;
+}
+
+table {
+    empty-cells: show;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+td {
+    height: 30px;
+    word-break: break-all;
+}
+
+h1, h2, h3 {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.table {
+    border: 1px solid #696c8a;
+    color: #666;
+}
+
+.table th {
+    background-repeat: repeat-x;
+    height: 30px;
+    background-color: #d0d8e8;
+}
+
+.table td, .table th {
+    border: 1px solid #cad9ea;
+    text-align: left;
+    padding: 0 1em 0;
+}
+
+.table tr.alter {
+    background-color: #f5fafe;
+}
+
+
+/*table*/
+/*{*/
+/*    border-collapse: collapse;*/
+/*    margin: 0 auto;*/
+/*    line-height: 15px;*/
+/*    text-align: center;*/
+/*    font-size: 16px;*/
+/*    font-family:'Roboto Light';*/
+/*}*/
+/*table td, table th*/
+/*{*/
+/*    border: 1px solid #cad9ea;*/
+/*    color: #666;*/
+/*    height: 18px;*/
+/*    width:90px;*/
+/*}*/
+/*table thead th*/
+/*{*/
+/*    background-color: #CCE8EB;*/
+/*    width:90px;*/
+/*}*/
+/*table tr:nth-child(odd)*/
+/*{*/
+/*    background: #fff;*/
+/*}*/
+/*table tr:nth-child(even)*/
+/*{*/
+/*    background: #F5FAFA;*/
+/*}*/
