@@ -309,7 +309,6 @@ graph.on('add', function(cell, collection, opt) {
 			}
 		}
 	} else if (opt.stencil && cell.attributes.type === 'requirement.entity') {
-	} else if (opt.stencil && cell.attributes.type === 'requirement.entity') {
 		for (i = 0; i < models.length - 1; i++) {
 			if (models[i].attributes.type === 'requirement.entity') {
 				joint.ui.FlashMessage.open('requirement already existed!', '', {
@@ -569,7 +568,7 @@ paper.on('link:pointerup', function(linkView) {
 			changeReferenceAndConstraint(link);
 		});
 		halo.on('action:addphe:pointerdown',function(evt){
-			addPhenomenon(link);
+			editPhenomenon(link);
 		});
 	}
 	else if (link.attributes.type == 'interface.CustomLink' ){
