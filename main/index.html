@@ -2,9 +2,9 @@
 <html>
 <head>
     <title>painter</title>
-	<link href="../../build/rappid.min.css" rel="stylesheet"/>
-	<link href="./style.css" rel="stylesheet"/>
-	<link href="../../apps/KitchenSink/assets/fonts/Century_Gothic/Century Gothic.ttf" rel="stylesheet"/>
+	<link href="../build/rappid.min.css" rel="stylesheet"/>
+	<link href="./css/style.css" rel="stylesheet"/>
+	<link href="../apps/KitchenSink/assets/fonts/Century_Gothic/Century Gothic.ttf" rel="stylesheet"/>
 </head>
 <body>
 <div class="toolbar-container"></div>
@@ -25,26 +25,26 @@
 		</tr>
 	</table>
 	<div id="selector">
-		<select onclick="updateOptions()" v-model="initiator">
+		<!-- <select onclick="updateOptions()" v-model="initiator">
 			<option style="width:50px; font-family:'Century Gothic'" v-for="option in options">{{option}}</option>
 		</select>
 		<select v-model="receiver">
 			<option style="width:50px; font-family:'Century Gothic'" v-for="option in options">{{option}}</option>
 		</select>
 		<input style="width:60px; font-family:'Century Gothic'" v-model="content">
-		<button onclick="updatePhenomenon()" style="width:40px; font-family:'Century Gothic'"> add</button>
+		<button onclick="updatePhenomenon()" style="width:40px; font-family:'Century Gothic'"> add</button> -->
 	</div>
 </div>
 
 <!-- Rappid/JointJS dependencies: -->
-<script src="../../node_modules/jquery/dist/jquery.js"></script>
-<script src="../../node_modules/lodash/lodash.js"></script>
-<script src="../../node_modules/backbone/backbone.js"></script>
-<script src="../../node_modules/graphlib/dist/graphlib.core.js"></script>
-<script src="../../node_modules/dagre/dist/dagre.core.js"></script>
+<script src="../node_modules/jquery/dist/jquery.js"></script>
+<script src="../node_modules/lodash/lodash.js"></script>
+<script src="../node_modules/backbone/backbone.js"></script>
+<script src="../node_modules/graphlib/dist/graphlib.core.js"></script>
+<script src="../node_modules/dagre/dist/dagre.core.js"></script>
 
-<script src="../../build/rappid.min.js"></script>
-<script src="./vue.js"></script>
-<script src="./index.js"></script>
+<script src="../build/rappid.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>
