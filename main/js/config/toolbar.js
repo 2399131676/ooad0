@@ -1,3 +1,73 @@
+var toolbar = new joint.ui.Toolbar({
+	groups: {
+		clear: {
+			index: 1
+		},
+		show: {
+			index: 2
+		},
+		zoom: {
+			index: 3
+		},
+		check: {
+			index: 4
+		}
+	},
+	tools: [{
+			type: 'button',
+			name: 'clear',
+			group: 'clear',
+			text: 'New Project'
+		},
+		{
+			type: 'button',
+			name: 'context',
+			group: 'show',
+			text: 'Show Context Diagram'
+		},
+		{
+			type: 'button',
+			name: 'problem',
+			group: 'show',
+			text: 'Show Problem Diagram'
+		},
+		{
+			type: 'zoom-out',
+			name: 'zoom-out',
+			group: 'zoom'
+		},
+		{
+			type: 'zoom-in',
+			name: 'zoom-in',
+			group: 'zoom'
+		},
+		{
+			type: 'button',
+			name: 'check',
+			group: 'check',
+			text: 'check'
+		}
+	],
+	references: {
+		paperScroller: paperScroller // built in zoom-in/zoom-out control types require access to paperScroller instance
+	}
+});
+toolbar.on({
+	'clear:pointerclick': graph.clear.bind(graph)
+});
+toolbar.on('context:pointerclick', function(event) {
+	showContextDiagram();
+});
+toolbar.on('problem:pointerclick', function(event) {
+	showProblemDiagram();
+});
+toolbar.on('check:pointerclick', function(event) {
+	check();
+});
+
+document.querySelector('.toolbar-container').appendChild(toolbar.el);
+toolbar.render();
+
 function showContextDiagram() {
     var models = paper.model.attributes.cells.models;
     for (var i = 0; i < models.length; i++) {

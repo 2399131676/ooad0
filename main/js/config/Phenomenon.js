@@ -1,3 +1,21 @@
+var vphenomenons = new Vue({
+	el: '#vue_phenomenon',
+	data: {
+		items: null
+	}
+});
+vphenomenons.items = new Array();
+
+var selector = new Vue({
+	el: '#selector',
+	data: {
+		options: null,
+		initiator: null,
+		receiver: null,
+		content: null
+	}
+});
+
 function phenomenon(link) {
     joint.ui.FlashMessage.open('Add phenomenon', '', {
         type: 'alert',
