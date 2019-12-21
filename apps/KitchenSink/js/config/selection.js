@@ -34,7 +34,6 @@ App.config = App.config || {};
                     'data-tooltip-padding': 15
                 }
             }
-
         }, {
             name: 'rotate',
             position: 'sw',
@@ -51,7 +50,6 @@ App.config = App.config || {};
                     'data-tooltip-padding': 15
                 }
             }
-
         }, {
             name: 'resize',
             position: 'se',

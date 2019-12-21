@@ -97,7 +97,7 @@
 }
 
 function changeReferenceAndConstraint(link) {
-	if (link.attributes.type == 'reference.CustomLink') {
+	if (link.attributes.type === 'reference.CustomLink') {
 		link.attr({
 			line: {
 				targetMarker: {
@@ -122,7 +122,7 @@ function changeReferenceAndConstraint(link) {
 }
 
 function changeDesignAnGiven(element) {
-	if (element.attributes.attrs.designOrNot.visibility == 'hidden') {
+	if (element.attributes.attrs.designOrNot.visibility === 'hidden') {
 		element.attr({
 			designOrNot: {
 				visibility: 'visible'
@@ -131,7 +131,7 @@ function changeDesignAnGiven(element) {
 				text: 'designDomain'
 			}
 		});
-	} else if (element.attributes.attrs.designOrNot.visibility == 'visible') {
+	} else if (element.attributes.attrs.designOrNot.visibility === 'visible') {
 		element.attr({
 			designOrNot: {
 				visibility: 'hidden'
@@ -285,7 +285,7 @@ function updateLink(linkView) {
 	})
 }
 
-//神奇不知道干啥的stencil
+// stencil
 var stencil = new joint.ui.Stencil({
 	paper: paperScroller,
 	scaleClones: true,
@@ -412,7 +412,7 @@ stencil.render().load({
 				text: 'C',
 				visibility: 'hidden',
 				ref: 'body',
-				refX: '93%',
+				refX: '91%',
 				refY: '80%'
 			},
 			designOrNot: {
@@ -455,7 +455,7 @@ stencil.render().load({
 
 // 点击显示的东西和右面的框框
 paper.on('element:pointerclick', function(elementView) {
-	if (elementView.model.attributes.type == 'domain.entity') {
+	if (elementView.model.attributes.type === 'domain.entity') {
 		joint.ui.Inspector.create('.inspector-container', {
 			cell: elementView.model,
 			inputs: {
@@ -571,21 +571,8 @@ paper.on('link:pointerclick', function(linkView) {
 	});
 });
 
-function getTypeById(id) {
-	var models = paper.model.attributes.cells.models;
-	for (i = 0; i < models.length; i++) {
-		if (models[i].id == id) return models[i].attributes.type;
-	}
-}
 
-function getLabelById(id) {
-	var models = paper.model.attributes.cells.models;
-	for (i = 0; i < models.length; i++) {
-		if (models[i].id == id) return models[i].attributes.attrs.label.text;
-	}
-}
-
-// 点element显示的东西,还有一个不知道干啥的halo
+// 点element显示 halo
 paper.on('element:pointerclick', function(elementView) {
 	var handles = [{
 			name: 'remove',
@@ -610,12 +597,12 @@ paper.on('element:pointerclick', function(elementView) {
 		}
 	});
 	handles.push({
-		name: "resize",
-		position: "se",
+		name: 'resize',
+		position: 'se',
 		events: {
-			pointerdown: "startResizing",
-			pointermove: "doResize",
-			pointerup: "stopBatch"
+			pointerdown: 'startResizing',
+			pointermove: 'doResize',
+			pointerup: 'stopBatch'
 		},
 		attrs: {
 		    '.handle': {
@@ -630,19 +617,23 @@ paper.on('element:pointerclick', function(elementView) {
 		cellView: elementView,
 		handles: handles
 	}).render();
-
+	// halo.addHandle({ name: 'resize', position: 'se', });
+	// halo.on('action:resize:pointerdown', function(evt) {
+	// 	evt.myStartResize();
+	// }
 	halo.on('action:link:add', function(link) {
 		var sourceId = link.get('source').id;
 		var targetId = link.get('target').id;
 		var sourceType = getTypeById(sourceId);
 		var targetType = getTypeById(targetId);
 
-		if (!sourceId || !targetId || (sourceType ==
-				'machine.entity' && targetType == 'requirement.entity') || (sourceType == 'requirement.entity' && targetType ==
-				'machine.entity')) {
-			link.remove();
-		} else if ((sourceType ==
-				'domain.entity' && targetType == 'requirement.entity') || (sourceType == 'requirement.entity' && targetType ==
+		if (!sourceId || !targetId || (sourceType ===
+			'machine.entity' && targetType === 'requirement.entity') || (sourceType === 'requirement.entity' && targetType ===
+			'machine.entity')||(sourceType ===
+			'requirement.entity' && targetType === 'requirement.entity')) {
+			link.remove();}
+		else if ((sourceType ===
+				'domain.entity' && targetType === 'requirement.entity') || (sourceType === 'requirement.entity' && targetType ===
 				'domain.entity')) {
 			changeInterfaceToReference(link);
 		}
@@ -652,6 +643,501 @@ paper.on('element:pointerclick', function(elementView) {
 	});
 });
 
+// var App = window.App || {};
+// paper.on('element:pointerclick', function(elementView) {
+//     App.MainView = joint.mvc.View.extend({
+//
+//         className: 'app',
+//
+//         events: {
+//             'mouseup input[type="range"]': 'removeTargetFocus',
+//             'mousedown': 'removeFocus',
+//             'touchstart': 'removeFocus'
+//         },
+//
+//         removeTargetFocus: function(evt) {
+//             evt.target.blur();
+//         },
+//
+//         removeFocus: function(evt) {
+//
+//             // do not lose focus on right-click
+//             if (evt.button === 2) return;
+//
+//             // do not lose focus if clicking current element for a second time
+//             var activeElement = document.activeElement;
+//             var target = evt.target;
+//             if ($.contains(activeElement, target) || (activeElement === target)) return;
+//
+//             activeElement.blur();
+//             window.getSelection().removeAllRanges();
+//         },
+//
+//         init: function() {
+//
+//             this.initializePaper();
+//             this.initializeStencil();
+//             this.initializeSelection();
+//             this.initializeToolsAndInspector();
+//             this.initializeNavigator();
+//             this.initializeToolbar();
+//             this.initializeKeyboardShortcuts();
+//             this.initializeTooltips();
+//         },
+//
+//         // Create a graph, paper and wrap the paper in a PaperScroller.
+//         initializePaper: function() {
+//
+//             var graph = this.graph = new joint.dia.Graph;
+//
+//             graph.on('add', function(cell, collection, opt) {
+//                 if (opt.stencil) this.createInspector(cell);
+//             }, this);
+//
+//             this.commandManager = new joint.dia.CommandManager({ graph: graph });
+//
+//             var paper = this.paper = new joint.dia.Paper({
+//                 width: 1000,
+//                 height: 1000,
+//                 gridSize: 10,
+//                 drawGrid: true,
+//                 model: graph,
+//                 defaultLink: new joint.shapes.app.Link,
+//                 defaultConnectionPoint: joint.shapes.app.Link.connectionPoint,
+//                 interactive: { linkMove: false },
+//                 async: true,
+//                 sorting: joint.dia.Paper.sorting.APPROX
+//             });
+//
+//             paper.on('blank:mousewheel', _.partial(this.onMousewheel, null), this);
+//             paper.on('cell:mousewheel', this.onMousewheel, this);
+//
+//             this.snaplines = new joint.ui.Snaplines({ paper: paper });
+//
+//             var paperScroller = this.paperScroller = new joint.ui.PaperScroller({
+//                 paper: paper,
+//                 autoResizePaper: true,
+//                 cursor: 'grab'
+//             });
+//
+//             this.$('.paper-container').append(paperScroller.el);
+//             paperScroller.render().center();
+//         },
+//
+//         // Create and populate stencil.
+//         initializeStencil: function() {
+//
+//             var stencil = this.stencil = new joint.ui.Stencil({
+//                 paper: this.paperScroller,
+//                 snaplines: this.snaplines,
+//                 scaleClones: true,
+//                 width: 240,
+//                 groups: App.config.stencil.groups,
+//                 dropAnimation: true,
+//                 groupsToggleButtons: true,
+//                 search: {
+//                     '*': ['type', 'attrs/text/text', 'attrs/root/dataTooltip', 'attrs/label/text'],
+//                     'org.Member': ['attrs/.rank/text', 'attrs/root/dataTooltip', 'attrs/.name/text']
+//                 },
+//                 // Use default Grid Layout
+//                 layout: true,
+//                 // Remove tooltip definition from clone
+//                 dragStartClone: function(cell) {
+//                     return cell.clone().removeAttr('root/dataTooltip');
+//                 }
+//             });
+//
+//             this.$('.stencil-container').append(stencil.el);
+//             stencil.render().load(App.config.stencil.shapes);
+//         },
+//
+//         initializeKeyboardShortcuts: function() {
+//
+//             this.keyboard = new joint.ui.Keyboard();
+//             this.keyboard.on({
+//
+//                 'ctrl+c': function() {
+//                     // Copy all selected elements and their associated links.
+//                     this.clipboard.copyElements(this.selection.collection, this.graph);
+//                 },
+//
+//                 'ctrl+v': function() {
+//
+//                     var pastedCells = this.clipboard.pasteCells(this.graph, {
+//                         translate: { dx: 20, dy: 20 },
+//                         useLocalStorage: true
+//                     });
+//
+//                     var elements = _.filter(pastedCells, function(cell) {
+//                         return cell.isElement();
+//                     });
+//
+//                     // Make sure pasted elements get selected immediately. This makes the UX better as
+//                     // the user can immediately manipulate the pasted elements.
+//                     this.selection.collection.reset(elements);
+//                 },
+//
+//                 'ctrl+x shift+delete': function() {
+//                     this.clipboard.cutElements(this.selection.collection, this.graph);
+//                 },
+//
+//                 'delete backspace': function(evt) {
+//                     evt.preventDefault();
+//                     this.graph.removeCells(this.selection.collection.toArray());
+//                 },
+//
+//                 'ctrl+z': function() {
+//                     this.commandManager.undo();
+//                     this.selection.cancelSelection();
+//                 },
+//
+//                 'ctrl+y': function() {
+//                     this.commandManager.redo();
+//                     this.selection.cancelSelection();
+//                 },
+//
+//                 'ctrl+a': function() {
+//                     this.selection.collection.reset(this.graph.getElements());
+//                 },
+//
+//                 'ctrl+plus': function(evt) {
+//                     evt.preventDefault();
+//                     this.paperScroller.zoom(0.2, { max: 5, grid: 0.2 });
+//                 },
+//
+//                 'ctrl+minus': function(evt) {
+//                     evt.preventDefault();
+//                     this.paperScroller.zoom(-0.2, { min: 0.2, grid: 0.2 });
+//                 },
+//
+//                 'keydown:shift': function(evt) {
+//                     this.paperScroller.setCursor('crosshair');
+//                 },
+//
+//                 'keyup:shift': function() {
+//                     this.paperScroller.setCursor('grab');
+//                 }
+//
+//             }, this);
+//         },
+//
+//         initializeSelection: function() {
+//
+//             this.clipboard = new joint.ui.Clipboard();
+//             this.selection = new joint.ui.Selection({
+//                 paper: this.paper,
+//                 handles: App.config.selection.handles,
+//                 useModelGeometry: true
+//             });
+//
+//             this.selection.collection.on('reset add remove', this.onSelectionChange.bind(this));
+//
+//             // Initiate selecting when the user grabs the blank area of the paper while the Shift key is pressed.
+//             // Otherwise, initiate paper pan.
+//             this.paper.on('blank:pointerdown', function(evt, x, y) {
+//
+//                 if (this.keyboard.isActive('shift', evt)) {
+//                     this.selection.startSelecting(evt);
+//                 } else {
+//                     this.selection.collection.reset([]);
+//                     this.paperScroller.startPanning(evt, x, y);
+//                     this.paper.removeTools();
+//                 }
+//
+//             }, this);
+//
+//             this.paper.on('element:pointerdown', function(elementView, evt) {
+//
+//                 // Select an element if CTRL/Meta key is pressed while the element is clicked.
+//                 if (this.keyboard.isActive('ctrl meta', evt)) {
+//                     if (this.selection.collection.find(function(cell) { return cell.isLink() })) {
+//                         // Do not allow mixing links and elements in the selection
+//                         this.selection.collection.reset([elementView.model]);
+//                     } else {
+//                         this.selection.collection.add(elementView.model);
+//                     }
+//                 }
+//
+//             }, this);
+//
+//             this.selection.on('selection-box:pointerdown', function(elementView, evt) {
+//
+//                 // Unselect an element if the CTRL/Meta key is pressed while a selected element is clicked.
+//                 if (this.keyboard.isActive('ctrl meta', evt)) {
+//                     evt.preventDefault();
+//                     this.selection.collection.remove(elementView.model);
+//                 }
+//
+//             }, this);
+//         },
+//
+//         onSelectionChange: function() {
+//             var paper = this.paper;
+//             var selection = this.selection;
+//             var collection = selection.collection;
+//             paper.removeTools();
+//             joint.ui.Halo.clear(paper);
+//             joint.ui.FreeTransform.clear(paper);
+//             joint.ui.Inspector.close();
+//             if (collection.length === 1) {
+//                 var primaryCell = collection.first();
+//                 var primaryCellView = paper.requireView(primaryCell);
+//                 selection.destroySelectionBox(primaryCell);
+//                 this.selectPrimaryCell(primaryCellView);
+//             } else if (collection.length === 2) {
+//                 collection.each(function(cell) {
+//                     selection.createSelectionBox(cell);
+//                 });
+//             }
+//         },
+//
+//         selectPrimaryCell: function(cellView) {
+//             var cell = cellView.model
+//             if (cell.isElement()) {
+//                 this.selectPrimaryElement(cellView);
+//             } else {
+//                 this.selectPrimaryLink(cellView);
+//             }
+//             this.createInspector(cell);
+//         },
+//
+//         selectPrimaryElement: function(elementView) {
+//
+//             var element = elementView.model;
+//
+//             new joint.ui.FreeTransform({
+//                 cellView: elementView,
+//                 allowRotation: false,
+//                 preserveAspectRatio: !!element.get('preserveAspectRatio'),
+//                 allowOrthogonalResize: element.get('allowOrthogonalResize') !== false
+//             }).render();
+//
+//             new joint.ui.Halo({
+//                 cellView: elementView,
+//                 handles: App.config.halo.handles
+//             }).render();
+//         },
+//
+//         selectPrimaryLink: function(linkView) {
+//
+//             var ns = joint.linkTools;
+//             var toolsView = new joint.dia.ToolsView({
+//                 name: 'link-pointerdown',
+//                 tools: [
+//                     new ns.Vertices(),
+//                     new ns.SourceAnchor(),
+//                     new ns.TargetAnchor(),
+//                     new ns.SourceArrowhead(),
+//                     new ns.TargetArrowhead(),
+//                     new ns.Segments,
+//                     new ns.Boundary({ padding: 15 }),
+//                     new ns.Remove({ offset: -20, distance: 40 })
+//                 ]
+//             });
+//
+//             linkView.addTools(toolsView);
+//         },
+//
+//         createInspector: function(cell) {
+//
+//             return joint.ui.Inspector.create('.inspector-container', _.extend({
+//                 cell: cell
+//             }, App.config.inspector[cell.get('type')]));
+//         },
+//
+//         initializeToolsAndInspector: function() {
+//
+//             this.paper.on({
+//
+//                 'cell:pointerup': function(cellView) {
+//                     var cell = cellView.model;
+//                     var collection = this.selection.collection;
+//                     if (collection.includes(cell)) return;
+//                     collection.reset([cell]);
+//                 },
+//
+//                 'link:mouseenter': function(linkView) {
+//
+//                     // Open tool only if there is none yet
+//                     if (linkView.hasTools()) return;
+//
+//                     var ns = joint.linkTools;
+//                     var toolsView = new joint.dia.ToolsView({
+//                         name: 'link-hover',
+//                         tools: [
+//                             new ns.Vertices({ vertexAdding: false }),
+//                             new ns.SourceArrowhead(),
+//                             new ns.TargetArrowhead()
+//                         ]
+//                     });
+//
+//                     linkView.addTools(toolsView);
+//                 },
+//
+//                 'link:mouseleave': function(linkView) {
+//                     // Remove only the hover tool, not the pointerdown tool
+//                     if (linkView.hasTools('link-hover')) {
+//                         linkView.removeTools();
+//                     }
+//                 }
+//
+//             }, this);
+//
+//             this.graph.on('change', function(cell, opt) {
+//
+//                 if (!cell.isLink() || !opt.inspector) return;
+//
+//                 var ns = joint.linkTools;
+//                 var toolsView = new joint.dia.ToolsView({
+//                     name: 'link-inspected',
+//                     tools: [
+//                         new ns.Boundary({ padding: 15 }),
+//                     ]
+//                 });
+//
+//                 cell.findView(this.paper).addTools(toolsView);
+//
+//             }, this)
+//         },
+//
+//         initializeNavigator: function() {
+//
+//             var navigator = this.navigator = new joint.ui.Navigator({
+//                 width: 240,
+//                 height: 115,
+//                 paperScroller: this.paperScroller,
+//                 zoom: {
+//                     grid: 0.2,
+//                     min: 0.2,
+//                     max: 5
+//                 },
+//                 paperOptions: {
+//                     async: true,
+//                     elementView: joint.shapes.app.NavigatorElementView,
+//                     linkView: joint.shapes.app.NavigatorLinkView,
+//                     cellViewNamespace: { /* no other views are accessible in the navigator */ }
+//                 }
+//             });
+//
+//             this.$('.navigator-container').append(navigator.el);
+//             navigator.render();
+//         },
+//
+//         initializeToolbar: function() {
+//
+//             var toolbar = this.toolbar = new joint.ui.Toolbar({
+//                 autoToggle: true,
+//                 groups: App.config.toolbar.groups,
+//                 tools: App.config.toolbar.tools,
+//                 references: {
+//                     paperScroller: this.paperScroller,
+//                     commandManager: this.commandManager
+//                 }
+//             });
+//
+//             toolbar.on({
+//                 'svg:pointerclick': this.openAsSVG.bind(this),
+//                 'png:pointerclick': this.openAsPNG.bind(this),
+//                 'to-front:pointerclick': this.applyOnSelection.bind(this, 'toFront'),
+//                 'to-back:pointerclick': this.applyOnSelection.bind(this, 'toBack'),
+//                 'layout:pointerclick': this.layoutDirectedGraph.bind(this),
+//                 'snapline:change': this.changeSnapLines.bind(this),
+//                 'clear:pointerclick': this.graph.clear.bind(this.graph),
+//                 'print:pointerclick': this.paper.print.bind(this.paper),
+//                 'grid-size:change': this.paper.setGridSize.bind(this.paper)
+//             });
+//
+//             this.$('.toolbar-container').append(toolbar.el);
+//             toolbar.render();
+//         },
+//
+//         applyOnSelection: function(method) {
+//             this.graph.startBatch('selection');
+//             this.selection.collection.models.forEach(function(model) { model[method](); });
+//             this.graph.stopBatch('selection');
+//         },
+//
+//         changeSnapLines: function(checked) {
+//
+//             if (checked) {
+//                 this.snaplines.startListening();
+//                 this.stencil.options.snaplines = this.snaplines;
+//             } else {
+//                 this.snaplines.stopListening();
+//                 this.stencil.options.snaplines = null;
+//             }
+//         },
+//
+//         initializeTooltips: function() {
+//
+//             new joint.ui.Tooltip({
+//                 rootTarget: document.body,
+//                 target: '[data-tooltip]',
+//                 direction: 'auto',
+//                 padding: 10,
+//                 animation: true
+//             });
+//         },
+//
+//         // backwards compatibility for older shapes
+//         exportStylesheet: '.scalable * { vector-effect: non-scaling-stroke }',
+//
+//         openAsSVG: function() {
+//
+//             var paper = this.paper;
+//             paper.hideTools().toSVG(function(svg) {
+//                 new joint.ui.Lightbox({
+//                     image: 'data:image/svg+xml,' + encodeURIComponent(svg),
+//                     downloadable: true,
+//                     fileName: 'Rappid'
+//                 }).open();
+//                 paper.showTools();
+//             }, {
+//                 preserveDimensions: true,
+//                 convertImagesToDataUris: true,
+//                 useComputedStyles: false,
+//                 stylesheet: this.exportStylesheet
+//             });
+//         },
+//
+//         openAsPNG: function() {
+//
+//             var paper = this.paper;
+//             paper.hideTools().toPNG(function(dataURL) {
+//                 new joint.ui.Lightbox({
+//                     image: dataURL,
+//                     downloadable: true,
+//                     fileName: 'Rappid'
+//                 }).open();
+//                 paper.showTools();
+//             }, {
+//                 padding: 10,
+//                 useComputedStyles: false,
+//                 stylesheet: this.exportStylesheet
+//             });
+//         },
+//
+//         onMousewheel: function(cellView, evt, x, y, delta) {
+//
+//             if (this.keyboard.isActive('alt', evt)) {
+//                 evt.preventDefault();
+//                 this.paperScroller.zoom(delta * 0.2, { min: 0.2, max: 5, grid: 0.2, ox: x, oy: y });
+//             }
+//         },
+//
+//         layoutDirectedGraph: function() {
+//
+//             joint.layout.DirectedGraph.layout(this.graph, {
+//                 setLinkVertices: true,
+//                 rankDir: 'TB',
+//                 marginX: 100,
+//                 marginY: 100
+//             });
+//
+//             this.paperScroller.centerContent();
+//         }
+//     });
+// });
 
 // 点link显示link上的tool
 paper.on('link:pointerup', function(linkView) {
@@ -686,9 +1172,9 @@ paper.on('link:pointerup', function(linkView) {
 			changeReferenceAndConstraint(link);
 		});
 		halo.on('action:addphe:pointerdown', function(evt) {
-			addPhenomenon(link);
+			phenomenon(link);
 		});
-	} else if (link.attributes.type == 'interface.CustomLink') {
+	} else if (link.attributes.type === 'interface.CustomLink') {
 		var handles = [{
 			name: 'addphe',
 			position: 'nw',
@@ -700,7 +1186,7 @@ paper.on('link:pointerup', function(linkView) {
 			//type:'toolbar'
 		}).render();
 		halo.on('action:addphe:pointerdown', function(evt) {
-			editPhenomenon(link);
+			phenomenon(link);
 		});
 	}
 
@@ -710,50 +1196,6 @@ paper.on('blank:pointerdown', function() {
 	paper.removeTools();
 });
 
-function editPhenomenon(link) {
-	joint.ui.FlashMessage.open('Add phenomenon', '', {
-		type: 'alert',
-		closeAnimation: {
-			delay: 2000
-		}
-	});
-	var source_id = link.attributes.source.id;
-	var target_id = link.attributes.target.id;
-	if (link.phenomenon == undefined) {
-		link.phenomenon = new Array();
-	};
-	var popup = new joint.ui.Popup({
-		events: {
-			'click .add': function() {
-				var phenomenon = this.$('.phenomenon').val();
-				var selected = this.$('.select option:selected').val();
-				var unselected = selected == target_id ? source_id : target_id;
-				var p = {
-					Initiator: selected,
-					Receiver: unselected,
-					content: phenomenon
-				};
-				link.phenomenon.push(p);
-				addPhenomenon(p);
-				popup.remove();
-			}
-		},
-		content: '<div>' +
-			'Initiator<br>' +
-			'<select class="select">' +
-			'<option value ="' + source_id + '">' + getLabelById(source_id) + '</option><br>' +
-			'<option value ="' + target_id + '">' + getLabelById(target_id) + '</option><br>' +
-			'</select><br>' +
-			'phenomenon<br>' +
-			'<input type="text" class="phenomenon" name="phenomenon"><br>' +
-			'phenomenonList<br>' +
-			getPhenomenonList(link) +
-			'<br><button class="add" style="background-color: beige;float:right">add</button><br>' +
-			'</div>',
-		target: document.getElementById('selector')
-	});
-	popup.render();
-}
 
 //上面的框框
 var toolbar = new joint.ui.Toolbar({
@@ -826,102 +1268,6 @@ toolbar.on('check:pointerclick', function(event) {
 document.querySelector('.toolbar-container').appendChild(toolbar.el);
 toolbar.render();
 
-function showContextDiagram() {
-	var models = paper.model.attributes.cells.models;
-	for (var i = 0; i < models.length; i++) {
-		if (models[i].attributes.type === "requirement.entity") {
-			models[i].attr('label/visibility', 'hidden');
-			models[i].attr('body/visibility', 'hidden');
-			models[i].attr('button/visibility', 'hidden');
-			models[i].attr('buttonLabel/visibility', 'hidden');
-		} else if (models[i].attributes.type === "reference.CustomLink") { //constraint.CustomLink
-			models[i].attr('line/visibility', 'hidden')
-		} else if (models[i].attributes.type === "constraint.CustomLink") {
-			models[i].attr('line/visibility', 'hidden');
-		}
-	}
-}
-
-function showProblemDiagram() {
-	var models = paper.model.attributes.cells.models;
-	for (var i = 0; i < models.length; i++) {
-		if (models[i].attributes.type === "requirement.entity") {
-			models[i].attr('label/visibility', 'visible');
-			models[i].attr('body/visibility', 'visible');
-			models[i].attr('button/visibility', 'visible');
-			models[i].attr('buttonLabel/visibility', 'visible');
-		} else if (models[i].attributes.type === "reference.CustomLink") {
-			models[i].attr('line/visibility', 'visible')
-		} else if (models[i].attributes.type === "constraint.CustomLink") {
-			models[i].attr('line/visibility', 'visible');
-		}
-	}
-}
-
-function check() {
-	var models = paper.model.attributes.cells.models;
-	var element = new Array();
-	var correct = true;
-	for (var i = 0; i < models.length; i++) {
-		var modelType = models[i].attributes.type;
-		var modelId = models[i].id;
-		if ((modelType === "requirement.entity") || (modelType === 'machine.entity') || (modelType === 'domain.entity')) {
-			element.push(modelId);
-		} else if ((modelType === 'interface.CustomLink') || (modelType === 'reference.CustomLink') || (modelType ===
-				'constraint.CustomLink')) {
-			if (models[i].phenomenon === undefined) {
-				joint.ui.FlashMessage.open('Connection should have phenomenons!', '', {
-					type: 'alert',
-					closeAnimation: {
-						delay: 2000
-					}
-				});
-				correct = false;
-			}
-			for (var j = 0; j < element.length; j++) {
-				if (element[j] === models[i].attributes.source.id || element[j] === models[i].attributes.target.id) {
-					element.splice(j, 1);
-					j--;
-				}
-			}
-		}
-	}
-	if (element.length !== 0) {
-		for (var i = 0; i < element.length; i++) {
-			var modelType = getTypeById(element[i]);
-			if (modelType === 'machine.entity') {
-				joint.ui.FlashMessage.open('Machine shouldn\'t be isolated!', '', {
-					type: 'alert',
-					closeAnimation: {
-						delay: 2000
-					}
-				});
-			} else if (modelType === 'domain.entity') {
-				joint.ui.FlashMessage.open('Problem domain shouldn\'t be isolated!', '', {
-					type: 'alert',
-					closeAnimation: {
-						delay: 2000
-					}
-				});
-			} else if (modelType === 'requirement.entity') {
-				joint.ui.FlashMessage.open('Requirement shouldn\'t be isolated!', '', {
-					type: 'alert',
-					closeAnimation: {
-						delay: 2000
-					}
-				});
-			}
-		}
-	} else if (element.length === 0 && correct) {
-		joint.ui.FlashMessage.open('Correct!', '', {
-			type: 'alert',
-			closeAnimation: {
-				delay: 2000
-			}
-		});
-	}
-}
-
 var vphenomenons = new Vue({
 	el: '#vue_phenomenon',
 	data: {
@@ -940,44 +1286,11 @@ var selector = new Vue({
 	}
 });
 
-
-function updateOptions() {
-	var models = paper.model.attributes.cells.models;
-	selector.options = new Array();
-	for (i = 0; i < models.length; i++) {
-		if (models[i].attributes.type === 'machine.entity' || models[i].attributes.type === 'domain.entity')
-			selector.options.push(models[i].attributes.attrs.label.text);
-	}
-}
-
-function updatePhenomenon() {
-	vphenomenons.items.push({
-		initiator: selector.initiator,
-		receiver: selector.receiver,
-		content: selector.content
-	});
-}
-
-function getPhenomenonList(model) {
-	var phenomenons = model.phenomenon;
-	var str = "<table border='1px' cellspacing='0' cellpadding='0'>" +
-		"<tr>" +
-		"<th bgcolor='#edf1f8'>Initiator</th>" +
-		"<th bgcolor='#edf1f8'>Receiver</th>" +
-		"<th bgcolor='#edf1f8'>Content</th>" +
-		"</tr>";
-	for (var i = 0; i < phenomenons.length; i++) {
-		str += '<tr bgcolor="#ecf0f8">' + '<td>' + getLabelById(phenomenons[i].Initiator) + '</td>' + '<td>' + getLabelById(
-			phenomenons[i].Receiver) + '</td>' + '<td>' + phenomenons[i].content + '</td>' + '</tr>'
-	}
-	str += '</table>';
-	return str;
-}
-
-function addPhenomenon(phenomenon) {
-	vphenomenons.items.push({
-		initiator: getLabelById(phenomenon.Initiator),
-		receiver: getLabelById(phenomenon.Receiver),
-		content: phenomenon.content
-	});
-}
+// function updateOptions() {
+// 	var models = paper.model.attributes.cells.models;
+// 	selector.options = new Array();
+// 	for (i = 0; i < models.length; i++) {
+// 		if (models[i].attributes.type === 'machine.entity' || models[i].attributes.type === 'domain.entity')
+// 			selector.options.push(models[i].attributes.attrs.label.text);
+// 	}
+// }

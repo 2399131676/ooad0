@@ -5,36 +5,28 @@
 	<link href="../build/rappid.min.css" rel="stylesheet"/>
 	<link href="./css/style.css" rel="stylesheet"/>
 	<link href="../apps/KitchenSink/assets/fonts/Century_Gothic/Century Gothic.ttf" rel="stylesheet"/>
+<!--	<link rel="stylesheet" type="text/css" href="joint.ui.freeTransform.css">-->
 </head>
 <body>
-<div class="toolbar-container"></div>
-<div class="stencil-container"></div>
-<div class="paper-container"></div>
-<div class="inspector-container"></div>
-<div class="phenomenon-container form-control" style="background-color:#ecf0f8 ;">
-	<table class="table text-nowrap" id="vue_phenomenon" width="95%">
-		<tr>
-			<th style="width:75px;font-family: 'Century Gothic' ">INITIATOR</th>
-			<th style="width:75px;font-family: 'Century Gothic'">RECEIVER</th>
-			<th style="width:64px;font-family: 'Century Gothic'">CONTENT</th>
-		</tr>
-		<tr v-for="item in items">
-			<td style="width:75px;font-family: 'Consolas'">{{item.initiator}}</td>
-			<td style="width:75px;font-family: 'Consolas'">{{item.receiver}}</td>
-			<td style="width:64px;font-family: 'Consolas'">{{item.content}}</td>
-		</tr>
-	</table>
-	<div id="selector">
-		<!-- <select onclick="updateOptions()" v-model="initiator">
-			<option style="width:50px; font-family:'Century Gothic'" v-for="option in options">{{option}}</option>
-		</select>
-		<select v-model="receiver">
-			<option style="width:50px; font-family:'Century Gothic'" v-for="option in options">{{option}}</option>
-		</select>
-		<input style="width:60px; font-family:'Century Gothic'" v-model="content">
-		<button onclick="updatePhenomenon()" style="width:40px; font-family:'Century Gothic'"> add</button> -->
+	<div class="toolbar-container"></div>
+	<div class="stencil-container"></div>
+	<div class="paper-container"></div>
+	<div class="inspector-container"></div>
+	<div class="phenomenon-container form-control" style="background-color:#ecf0f8 ;">
+		<table class="table text-nowrap" id="vue_phenomenon" width="95%">
+			<tr>
+				<th style="width:75px;font-family: 'Century Gothic' ">INITIATOR</th>
+				<th style="width:75px;font-family: 'Century Gothic'">RECEIVER</th>
+				<th style="width:64px;font-family: 'Century Gothic'">CONTENT</th>
+			</tr>
+			<tr v-for="item in items">
+				<td style="width:75px;font-family: 'Consolas'">{{item.initiator}}</td>
+				<td style="width:75px;font-family: 'Consolas'">{{item.receiver}}</td>
+				<td style="width:64px;font-family: 'Consolas'">{{item.content}}</td>
+			</tr>
+		</table>
+		<div id="selector"></div>
 	</div>
-</div>
 
 <!-- Rappid/JointJS dependencies: -->
 <script src="../node_modules/jquery/dist/jquery.js"></script>
@@ -42,9 +34,14 @@
 <script src="../node_modules/backbone/backbone.js"></script>
 <script src="../node_modules/graphlib/dist/graphlib.core.js"></script>
 <script src="../node_modules/dagre/dist/dagre.core.js"></script>
-
+<!--<script src="../dist/joint.ui.selection.min.js"></script>-->
 <script src="../build/rappid.min.js"></script>
 <script src="js/vue.js"></script>
 <script src="js/index.js"></script>
+<!--Application-->
+<script src="js/config/getById.js"></script>
+<script src="js/config/updateLink.js"></script>
+<script src="js/config/Phenomenon.js"></script>
+<script src="js/config/toolbar.js"></script>
 </body>
 </html>
