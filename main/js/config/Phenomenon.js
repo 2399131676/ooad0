@@ -17,18 +17,12 @@ var selector = new Vue({
 });
 
 function phenomenon(link) {
-    joint.ui.FlashMessage.open('Add phenomenon', '', {
-        type: 'alert',
-        closeAnimation: {
-            delay: 2000
-        }
-    });
     var source_id = link.attributes.source.id;
     var target_id = link.attributes.target.id;
     if (link.phenomenon == undefined) {
         link.phenomenon = new Array();
     };
-    var popup = new joint.ui.Popup({
+    var dialog = new joint.ui.Dialog({
         events: {
             'click .add': function() {
                 var phenomenon = this.$('.phenomenon').val();
@@ -41,9 +35,15 @@ function phenomenon(link) {
                 };
                 link.phenomenon.push(p);
                 addPhenomenon(p);
-                popup.remove();
-            }
+            },
+			'click .cancel':function(){
+				dialog.close();
+			}
         },
+		title:'ADD PHENOMENON',
+		width:210,
+		closeButton:false,
+		draggable:true,
         content: '<div>' +
             'Initiator<br>' +
             '<select class="select">' +
@@ -54,11 +54,11 @@ function phenomenon(link) {
             '<input type="text" class="phenomenon" name="phenomenon"><br>' +
             'phenomenonList<br>' +
             getPhenomenonList(link) +
-            '<br><button class="add" style="background-color: beige;float:right">add</button><br>' +
+            '<br><button class="add" style="background-color: beige;float:right">add</button><button class="cancel" style="background-color: beige;float:right">cancel</button><br>' +
             '</div>',
         target: document.getElementById('selector')
     });
-    popup.render();
+    dialog.open();
 }
 
 function updatePhenomenon() {
